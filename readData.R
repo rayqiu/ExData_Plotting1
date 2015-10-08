@@ -14,11 +14,12 @@ if (!file.exists("myCachedData.rds")) {
     # Read in data
     h <- read_delim("household_power_consumption.txt", ";", col_names = TRUE,
                     na = '?', col_types = "ccnnnnnnn")
-    # Combine date and time to a single R object
+    # Combine Date and Time to a single R object
     h$Date.Time <- dmy_hms(paste(h$Date, h$Time))
-    # Keep only rows for 2007-02-01 and 2007-02-02.
+    # Keep only rows for 2007-02-01 and 2007-02-02, and remove columns Date and Time.
     dat <- h %>% 
-           filter(Date.Time >= ymd("2007-02-01") & Date.Time < ymd("2007-02-03"))
+           filter(Date.Time >= ymd("2007-02-01") & Date.Time < ymd("2007-02-03")) %>%
+           select(-Date, -Time)
     # Cache data
     saveRDS(dat, file = "myCachedData.rds")
 } else {
